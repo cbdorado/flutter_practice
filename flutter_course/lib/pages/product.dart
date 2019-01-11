@@ -1,10 +1,13 @@
 import "package:flutter/material.dart";
 import "dart:async";
+import '../widgets/ui_elements/title_default.dart';
 
 class ProductPage extends StatelessWidget {
   final String title;
   final String imageUrl;
-  ProductPage(this.title, this.imageUrl);
+  final double price;
+  final String description;
+  ProductPage(this.title, this.imageUrl, this.price, this.description);
 
   _showWarningDialog(BuildContext context) {
     showDialog(
@@ -29,6 +32,34 @@ class ProductPage extends StatelessWidget {
         });
   }
 
+  Widget _buildAddressPriceRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'Union Square, San Francisco',
+          style: TextStyle(
+            color: Colors.grey,
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: 5.0,
+          ),
+          child: Text(
+            '|',
+            style: TextStyle(
+              color: Colors.grey,
+            ),
+          ),
+        ),
+        Text(
+          '\$${price.toString()}',
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -39,27 +70,30 @@ class ProductPage extends StatelessWidget {
         return Future.value(false);
       },
       child: Scaffold(
-          appBar: AppBar(
-            title: Text(title),
+        appBar: AppBar(
+          title: Text(title),
+        ),
+        body: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(imageUrl),
+              Container(
+                padding: EdgeInsets.all(10.0),
+                child: TitleDefault(title),
+              ),
+              _buildAddressPriceRow(),
+              Container(
+                padding: EdgeInsets.only(top: 10.0),
+                child: Text(
+                  description,
+                  textAlign: TextAlign.center,
+                ),
+              )
+            ],
           ),
-          body: Center(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset("assets/food.jpg"),
-                  Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(title),
-                  ),
-                  Container(
-                      padding: EdgeInsets.all(10.0),
-                      child: RaisedButton(
-                        color: Theme.of(context).accentColor,
-                        child: Text("Delete"),
-                        onPressed: () => _showWarningDialog(context),
-                      ))
-                ]),
-          )),
+        ),
+      ),
     );
   }
 }

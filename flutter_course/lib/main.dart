@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import "./pages/products_admin.dart";
 import "./pages/products.dart";
-import "./widgets/product_manager.dart";
 import "./pages/auth.dart";
 import "./pages/product.dart";
 
@@ -39,11 +38,10 @@ class _MyAppState extends State<MyApp> {
       ),
       // home: AuthPage(),
       routes: {
-        '/': (BuildContext context) =>
-            AuthPage(),
-        '/products': (BuildContext context) =>
-            ProductsPage(_products),
-        '/admin': (BuildContext context) => ProductsAdminPage(_addProduct, _deleteProduct),
+        '/': (BuildContext context) => AuthPage(),
+        '/products': (BuildContext context) => ProductsPage(_products),
+        '/admin': (BuildContext context) =>
+            ProductsAdminPage(_addProduct, _deleteProduct),
       },
       onGenerateRoute: (RouteSettings settings) {
         final List<String> pathElements = settings.name.split('/');
@@ -53,15 +51,20 @@ class _MyAppState extends State<MyApp> {
         if (pathElements[1] == 'product') {
           final int index = int.parse(pathElements[2]);
           return MaterialPageRoute<bool>(
-              builder: (BuildContext context) => ProductPage(
-                  _products[index]['title'], _products[index]['image']));
+            builder: (BuildContext context) => ProductPage(
+                  _products[index]['title'],
+                  _products[index]['image'],
+                  _products[index]['price'],
+                  _products[index]['description'],
+                ),
+          );
         }
         return null;
       },
       onUnknownRoute: (RouteSettings settings) {
         return MaterialPageRoute(
-            builder: (BuildContext context) =>
-                ProductsPage(_products));
+          builder: (BuildContext context) => ProductsPage(_products),
+        );
       },
     );
   }
