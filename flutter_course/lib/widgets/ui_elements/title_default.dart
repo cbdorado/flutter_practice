@@ -7,10 +7,9 @@ class TitleDefault extends StatelessWidget {
     @override
       Widget build(BuildContext context) {
         // TODO: implement build
-        return Expanded(
-                  child: Text(title,
+        return Text(title,
                       style: TextStyle(
-                          fontSize: 26.0, fontWeight: FontWeight.bold)),
-                );
+                          fontSize: 26.0, fontWeight: FontWeight.bold));
+                
       }
 }
