@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
 import './product_edit.dart';
 import 'package:scoped_model/scoped_model.dart';
-import '../scoped-models/products.dart';
+import '../scoped-models/main.dart';
 
 class ProductListPage extends StatelessWidget {
 
-  Widget _buildEditButton(BuildContext context, int index, ProductsModel model) {
+  Widget _buildEditButton(BuildContext context, int index, MainModel model) {
     
         return IconButton(
           icon: Icon(Icons.edit),
@@ -17,7 +17,9 @@ class ProductListPage extends StatelessWidget {
                   return ProductEditPage();
                 },
               ),
-            );
+            ).then((_) {
+              model.selectProduct(null);
+            });
           },
         );
 
@@ -25,12 +27,12 @@ class ProductListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<ProductsModel>(
-      builder: (BuildContext context, Widget child, ProductsModel model) {
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
         return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
         return Dismissible(
-          key: Key(model.products[index].title),
+          key: Key(model.getProducts[index].title),
           onDismissed: (DismissDirection direction) {
             if (direction == DismissDirection.endToStart) {
               model.selectProduct(index);
@@ -48,11 +50,11 @@ class ProductListPage extends StatelessWidget {
               ListTile(
                 leading: CircleAvatar(
                   backgroundImage: AssetImage(
-                    model.products[index].image,
+                    model.getProducts[index].image,
                   ),
                 ),
-                subtitle: Text('\$${model.products[index].price}'),
-                title: Text(model.products[index].title),
+                subtitle: Text('\$${model.getProducts[index].price}'),
+                title: Text(model.getProducts[index].title),
                 trailing: _buildEditButton(context, index, model),
               ),
               Divider()
@@ -60,7 +62,7 @@ class ProductListPage extends StatelessWidget {
           ),
         );
       },
-      itemCount: model.products.length,
+      itemCount: model.getProducts.length,
     );
       },
     );

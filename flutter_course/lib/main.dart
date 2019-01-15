@@ -3,9 +3,8 @@ import "./pages/products_admin.dart";
 import "./pages/products.dart";
 import "./pages/auth.dart";
 import "./pages/product.dart";
-import './models/product.dart';
 import 'package:scoped_model/scoped_model.dart';
-import './scoped-models/products.dart';
+import './scoped-models/main.dart';
 
 // You can only use the arrow if and only if there is one statement in the method.
 void main() => runApp(MyApp());
@@ -21,8 +20,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<ProductsModel>(
-      model: ProductsModel(),
+    return ScopedModel<MainModel>(
+      model: MainModel(),
       child: MaterialApp(
         theme: ThemeData(
           brightness: Brightness.light,

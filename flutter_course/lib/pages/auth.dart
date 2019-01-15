@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
-import "./products.dart";
+import 'package:scoped_model/scoped_model.dart';
+import '../scoped-models/main.dart';
 
 class AuthPage extends StatefulWidget {
   @override
@@ -39,12 +40,14 @@ class _AuthPageState extends State<AuthPage> {
       ),
       keyboardType: TextInputType.emailAddress,
       validator: (String value) {
-        if(value.isEmpty || !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(value)){
+        if (value.isEmpty ||
+            !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                .hasMatch(value)) {
           return 'Please enter a valid email';
         }
       },
       onSaved: (String value) {
-        _formData['email']= value;
+        _formData['email'] = value;
       },
     );
   }
@@ -58,7 +61,7 @@ class _AuthPageState extends State<AuthPage> {
       ),
       obscureText: true,
       validator: (String value) {
-        if(value.isEmpty || value.length < 6){
+        if (value.isEmpty || value.length < 6) {
           return 'Password invalid';
         }
       },
@@ -80,21 +83,24 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Widget _buildLoginButton() {
-    return FlatButton(
-      color: Theme.of(context).primaryColor,
-      textColor: Colors.white,
-      child: Text("Login"),
-      onPressed: 
-        _submitForm,
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        return FlatButton(
+          color: Theme.of(context).primaryColor,
+          textColor: Colors.white,
+          child: Text("Login"),
+          onPressed: () => _submitForm(model.login),
+        );
+      },
     );
   }
 
-  void _submitForm() {
-    if(!_formKey.currentState.validate() || !_formData['acceptTerms']) {
+  void _submitForm(Function login) {
+    if (!_formKey.currentState.validate() || !_formData['acceptTerms']) {
       return;
     }
     _formKey.currentState.save();
-    print(_formData);
+    login(_formData['email'], _formData['password']);
     Navigator.pushReplacementNamed(context, '/products');
   }
 
